@@ -114,3 +114,81 @@ or it's alias:
 
 Thus, using `list-commands` and `find-command` it's possible to get the command you need, and `help` will show help
 and usage information about it.
+
+## Hints
+
+### Shortcut
+
+Twister contains `twister.sh` script, that is responsible to start a twister application. This script
+is written in the way it can be run from any directory, or it's possible to create a symbolic link to
+this shell script and run it. This is actually a recommended way: create a symlink and put it to your
+`~/bin` directory (make sure that `bin/` directory is in `$PATH`):
+
+    ln -s {project_path}/twister/twister.sh ~/bin/twister
+
+Now it's possible to run commands from any directory, and it will be able to resolve twister and project
+directory, and execute command for them:
+
+    cd /usr/local    		    # go to some directory
+    twister list-commands		# still working
+
+It's possible to add shortcut with built-in command `add-shortcut`:
+
+    python twister.py add-shortcut                 # add shortcut /usr/local/bin
+    python twister.py add-shortcut --dest ~/bin    # add shortcut to ~/bin/
+
+
+### Built-in commands within module
+
+Some built-in commands like `list-commands`, `help` or `find-command` can narrow it's work for specified module using `--module` argument,
+for example:
+
+    twister find-command clean --module dev
+    twister help clean --module dev
+    twister list-commands --module db
+
+Although these commands belong to the built-in module (ie `twister`), it's possible to use them within some module:
+
+    twister dev find-command clean
+    twister db list-commands
+    twister runtime find-command list
+
+How this works? Well, when Twister finds that command is not in module, it checks if such command exists in the built-in module.
+And if it's true, then it uses that command and pass module name as argument via `--module`. No checks whether this command
+can accept `--module` argument are done. This means, that this won't work for all built-in commands. For example, command
+`list-modules` doesn't accept `--module` argument. Means, you'll see error if run something like that:
+
+    twister dev list-modules
+
+So, simply put, the command:
+
+    twister dev find-command clean
+
+is converted to:
+
+    twister find-command --module dev clean
+
+and executed.
+
+
+### Aliases
+
+There are also a few commands that are used to often, and it might be time consuming entering them again and again.
+Replacing thus commands with shorter command can be very convenient. That's why twister has aliases.
+
+Twister allows to replace command with arguments with some alias. Aliases are configure by editing file `alias` in
+twister directory. It's also possible to get the list of aliases using command:
+
+    twister list-aliases
+
+or its alias:
+
+    twister aliases
+
+It's possible to specify arguments for aliases, thus one can create alias `run-some-app` => `runtime run some-app`.
+
+There is a list of predefined aliases:
+
+ - `aliases` => `list-aliases`
+ - `commands` => `list-commands`
+ - `modules` => `list-modules`
