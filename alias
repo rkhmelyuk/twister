@@ -1,0 +1,7 @@
+# twister aliases
+# format: alias=[module] command [args]
+
+# simplify command names
+aliases=list-aliases
+commands=list-commands
+modules=list-modules
