@@ -24,6 +24,17 @@ options available:
 
     twister
 
+Also, twister could be used in different projects. Thus it's better to use the project name instead of using `twister` as link name. For example, let you are using twister for project named 'msound'. In this case you want to have a command named `msound` instead of `twister`. To add custom shortcut just use the parameter `--name`:
+
+    python twister.py add-shortcut --name msound
+
+Now you can do things like:
+
+    msound list-commands
+    msound dev clean
+
+etc.
+
 ### twister usage
 
 You'll see that twister is command oriented, and that each command belongs to specified module. Module name is optional,
